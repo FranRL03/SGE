@@ -1,0 +1,48 @@
+#!/bin/bash
+
+url: https://github.com/facetrollex/angular5-typescript-calculator.git
+
+if ! dpkg -l | grep -E "node|npm"; then
+
+    echo "No se han encontrado. Instalando..."
+    
+    sudo apt update
+    sudo apt install nodejs
+    
+    echo "Comprobamos la versión que se ha instalado"
+    
+    nodejs -v
+    
+    sudo apt install npm
+    
+else
+    echo "======================================"
+    echo "Instalación de node y npm correcta"
+    echo "======================================"
+fi
+
+git clone https://github.com/facetrollex/angular5-typescript-calculator.git repo
+
+cd repo
+
+npm install
+
+if ! dpkg -l | grep -E "nginx"; then
+    echo "No se ha encontrado Nginx. Instalando..."
+    
+    sudo apt-get install nginx
+    
+    sudo ufw allow 'Nginx Full'
+    
+    sudo apt-get install ufw
+    
+    sudo systemctl status nginx
+else
+    echo "======================================="
+    echo "Instalación de nginx y ufw correcta"
+    echo "======================================="
+fi
+    
+ng build --prod
+
+rm -rf repo
