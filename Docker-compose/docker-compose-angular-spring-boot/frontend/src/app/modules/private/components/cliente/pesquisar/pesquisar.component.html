@@ -1,0 +1,115 @@
+<div class="container"
+     fxLayout="column"
+     fxLayoutAlign="space-evenly center">
+    <mat-card class="card-space">
+        <div>
+            <mat-card-title>Pesquisar Cliente</mat-card-title>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-evenly center">
+            <div fxFlex="100">
+                <form [formGroup]="form" autocomplete="off" novalidate (keydown)="pesquisaPorEnter($event)">
+                    <mat-form-field class="container" appearance="outline">
+                        <mat-label>Nome</mat-label>
+                        <input matInput formControlName="nome" type="text" placeholder="Nome do Cliente" maxlength="20">
+                    </mat-form-field>
+                </form>
+            </div>
+            <div fxFlex="50" hidden="hidden">
+                <form [formGroup]="form" autocomplete="off" novalidate (keydown)="pesquisaPorEnter($event)">
+                    <mat-form-field class="container" appearance="outline">
+                        <mat-label>CPF</mat-label>
+                        <input matInput formControlName="cpf" type="text" placeholder="CPF do Cliente" maxlength="11">
+                    </mat-form-field>
+                </form>
+            </div>
+
+        </div>
+
+        <div fxLayout="row"
+             fxLayoutAlign="end center"
+             fxLayoutGap="20px">
+            <div fxLayoutAlign="space-evenly center">
+                <button mat-raised-button color="default" (click)="limparCampos()">
+                    <em class="material-icons icon-card">clear</em>Limpar
+                </button>
+            </div>
+            <div fxLayoutAlign="space-evenly center">
+                <button mat-raised-button color="primary" (click)="getClientePageByName()" [disabled]="validarFormulario">
+                    <em class="material-icons icon-card">search</em>Pesquisar
+                </button>
+            </div>
+        </div>
+    </mat-card>
+    <mat-card [hidden]="flagTable">
+        <div class="tableempty">
+            Nenhum registro encontrado.
+        </div>
+    </mat-card>
+    <div fxLayout="row" fxLayoutAlign="start center" *ngIf="clienteDataSource.length !== 0">
+        <mat-form-field fxFlex="100" appearance="outline">
+            <mat-label>Filtro</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Filtrar tabela: Ex. nome do Cliente ou CPF" #input>
+        </mat-form-field>
+    </div>
+    <mat-card [hidden]="clienteDataSource.length === 0">
+        <div fxLayout="row">
+            <div fxLayoutAlign="flex-start" fxFlex="50">
+                <mat-card-title>Lista de Clientes</mat-card-title>
+            </div>
+            <div fxLayoutAlign="end" fxFlex="50">
+                <button mat-raised-button color="primary" *ngIf="isAdmin()" (click)="cadastrar()">
+                    <em class="material-icons icon-card">add</em>Novo
+                </button>
+            </div>
+        </div>
+        <div class="mat-elevation-z5">
+            <table mat-table [dataSource]="datasource" matSort="false">
+
+                <ng-container matColumnDef="codigo">
+                    <th mat-header-cell *matHeaderCellDef>Código</th>
+                    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="nome">
+                    <th mat-header-cell *matHeaderCellDef>Nome</th>
+                    <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="cpf">
+                    <th mat-header-cell *matHeaderCellDef>CPF</th>
+                    <td mat-cell *matCellDef="let element"> {{element.cpf}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="acoes">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let element" fxLayoutAlign="space-evenly center">
+                        <button matTooltip="Visualizar Cliente" mat-flat-button color="visualizar"
+                                (click)="visualizarCliente(element.id)" *ngIf="isAdmin() || isUser()">
+                            <em class="material-icons icon-card">remove_red_eye</em>
+                        </button>
+                        <button mat-flat-button color="editar" matTooltip="Editar Cliente"
+                                (click)="editarCliente(element.id)" *ngIf="isAdmin()">
+                            <em class="material-icons icon-card">edit</em>
+                        </button>
+                        <button mat-flat-button color="warn" (click)="confirmarExclusao(element.id)" *ngIf="isAdmin()">
+                            <em class="material-icons icon-card">delete</em>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="colunasCliente; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: colunasCliente;"></tr>
+            </table>
+
+            <mat-paginator
+                #paginator
+                [pageIndex]=0
+                [pageSizeOptions]="[5, 10, 20, 30, 40, 50]"
+                [length]="totalResultados"
+                (page)="configuraPaginaCliente($event)"
+                [hidden]="!flagTable">
+            </mat-paginator>
+        </div>
+
+    </mat-card>
+</div>
