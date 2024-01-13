@@ -17,8 +17,6 @@ print("==================")
 
 palabras = []  # Variable para almacenar las palabras clave
 contador = 1 
-elementosUnicos = []
-vecesRepetidos = []
 
 while True:
     print("\nIntroduzca un número")
