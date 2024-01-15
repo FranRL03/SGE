@@ -15,7 +15,7 @@ print("[2] Mostrar palabras clave")
 print("[0] Salir")
 print("==================")
 
-palabras = []  # Variable para almacenar las palabras clave
+palabras = []  
 contador = 1 
 
 while True:
