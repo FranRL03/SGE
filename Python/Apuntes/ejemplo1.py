@@ -18,3 +18,12 @@ if(n > 0):
 else:
     print("menor")
     print(n)
+
+# Una tupla no se puede modificar, para añadir un elemento se puede hacer:
+
+print("Añadimos elemento a la tupla")
+
+t = (1,2,3)
+t2 = (1,2,3) + (4,)
+
+print(t2)
