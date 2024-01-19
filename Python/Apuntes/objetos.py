@@ -1,5 +1,7 @@
 class Cliente:
 
+    # para poner los atributos privados hay que ponerle dos guiones bajos depues
+    # del punto EJ: __dni
     def __init__(self, dni, nombre, apellidos):
         self.dni = dni
         self.nombre = nombre
